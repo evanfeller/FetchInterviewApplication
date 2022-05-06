@@ -2,6 +2,6 @@ package com.example.fetchinterviewapplication.DataLayer
 
 data class Model(
     val id: Int,
-    val listID: Int,
+    val listId: Int,
     val name: String?
 )

@@ -1,46 +1,40 @@
 package com.example.fetchinterviewapplication
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.ListView
-import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.fetchinterviewapplication.DataLayer.Model
 import com.example.fetchinterviewapplication.DataLayer.RetrofitService
 import com.example.fetchinterviewapplication.DataLayer.Room.AppDatabase
 import com.example.fetchinterviewapplication.DataLayer.Room.ListEntity
 import com.example.fetchinterviewapplication.View.ListFragment
 import com.example.fetchinterviewapplication.View.ListViewModel
+import com.example.fetchinterviewapplication.databinding.ActivityMainBinding
+import com.example.fetchinterviewapplication.databinding.ListFragmentBinding
+import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity() {
+class MainActivityViewModel : ViewModel() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        getData()
-        setContentView(R.layout.activity_main)
-        launchListFragment()
+    var db: AppDatabase? = null
+
+    fun setUpRoom(context: Context) {
+        db = AppDatabase(context)
     }
-
-    private fun launchListFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.root_container, ListFragment() )
-            .commitAllowingStateLoss()
-    }
-
 
     private fun intializeDB(entities: ArrayList<ListEntity>) {
-        val db = AppDatabase(this)
-
         GlobalScope.launch {
-            db.listDao().insertAll(entities)
+            db?.listDao()?.insertAll(entities)
         }
     }
 
-    private fun getData() {
+    fun getData() {
         CoroutineScope(Dispatchers.IO).launch {
             val response = RetrofitService.create().getData()
             response.enqueue(object : Callback<List<Model>?> {
@@ -49,7 +43,13 @@ class MainActivity : AppCompatActivity() {
                     response: Response<List<Model>?>
                 ) {
                     val items = response.body()
-                    val entities = items?.map { ListEntity(it.id, it.listID, it.name) }
+                    val entities = items?.mapNotNull {
+                        if (!it.name.isNullOrEmpty()) {
+                            ListEntity(it.id, it.listId, it.name)
+                        } else {
+                            null
+                        }
+                    }
                     entities?.let { intializeDB(ArrayList(it)) }
                 }
 
@@ -59,4 +59,42 @@ class MainActivity : AppCompatActivity() {
             })
         }
     }
+}
+
+
+class MainActivity : AppCompatActivity() {
+
+    private val viewModel: MainActivityViewModel = MainActivityViewModel()
+
+    var tabLayout: TabLayout? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.setUpRoom(this)
+        viewModel.getData()
+        setContentView(R.layout.activity_main)
+        tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                when (tab?.position) {
+                    0 -> launchListFragment(1)
+                    1 -> launchListFragment(2)
+                    2 -> launchListFragment(3)
+                    3 -> launchListFragment(4)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+        launchListFragment(1)
+    }
+
+    private fun launchListFragment(listId: Int) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.root_container, ListFragment(listId))
+            .commitAllowingStateLoss()
+    }
+
 }

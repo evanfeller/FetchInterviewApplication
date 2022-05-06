@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class ListEntity(
     @PrimaryKey var id: Int,
-    @ColumnInfo(name = "listID") var listID: Int,
+    @ColumnInfo(name = "listId") var listId: Int,
     @ColumnInfo(name = "name") var name: String?
 )

@@ -30,9 +30,9 @@ class RecyclerAdapter : RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.name.text = itemArrayList[position].name
+        holder.name.text = "Name : " + itemArrayList[position].name
         holder.id.text = itemArrayList[position].id.toString()
-        holder.itemID.text = itemArrayList[position].listID.toString()
+        holder.itemID.text = "ItemId : " + itemArrayList[position].listId.toString()
     }
 
     override fun getItemCount(): Int {

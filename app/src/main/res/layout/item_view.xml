@@ -19,28 +19,38 @@
             android:id="@+id/id_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="id"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_margin="16dp"/>
+            android:layout_below="@+id/itemID_tv"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="181dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="id" />
 
         <TextView
             android:id="@+id/itemID_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="itemID"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@id/name_tv"
             android:layout_alignParentLeft="true"
-            android:layout_margin="16dp"/>
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:text="itemID" />
 
         <TextView
             android:id="@+id/name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="name"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="16dp"/>
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="306dp"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:text="name" />
 
     </RelativeLayout>
 
