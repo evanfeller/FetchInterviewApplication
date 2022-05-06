@@ -10,4 +10,6 @@ Going forward, the first couple of improvements I would make would be the follow
 - Style it out more and spend some time cleaning up auto generated UI components
 - Introduce on click of cards to edit the different items in the list
 
+# Screenshot of current build
+
 <img src="https://github.com/evanfeller/FetchInterviewApplication/blob/main/readme%20assets/Screenshot_20220505_221227.png" alt="image" width="200">
